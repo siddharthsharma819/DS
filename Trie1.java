@@ -49,7 +49,7 @@ class TrieNode{
         return this.childNodes.get(ch);
     }
     public void removeChildNode(Character ch){
-        if(!this.childNodes.containsKey(ch))
+        if(this.childNodes.containsKey(ch))
             this.childNodes.remove(ch);
     }
     public TrieNode getChildNode(Character ch){
@@ -97,20 +97,20 @@ class Trie{
         return result;
     }
     private boolean delete(TrieNode root,char[] arr,int i){
-        boolean result=false;
-        TrieNode cur=root.getChildNode(arr[i]);
+        TrieNode mapping=root.getChildNode(arr[i]);;
+        boolean result=false;boolean last=false;
         if(i==arr.length-1){
-            cur.setIsEndNode(false);
-            if(cur.getChildCount()==0){
-                return true;
+            mapping.setIsEndNode(false);
+            if(mapping.getChildCount()==0){
+                root.removeChildNode(arr[i]);
+                last=true;
             }
-            else
-                return false;
         }
-        result=delete(cur,arr,i+1);
+        else
+            result=delete(mapping,arr,i+1);
         if(result)
-            root.removeChildNode(arr[i]);
-        if(root.getChildCount()==0)
+            root.removeChildNode(arr[i-1]);
+        if((last||result) && !root.getIsEndNode() && root.getChildCount()==0)
             return true;
         else
             return false;
